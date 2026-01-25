@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        * {
+            font-family: "Orbitron";
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="flex items-center justify-between py-5 px-10 lg:py-10 lg:px-20">
+
+        <div class="flex items-center">
+            <img src="./assets/logo.png" alt="" class="w-15 lg:w-20">
+            <span class="text-md lg:text-xl font-bold text-[#404040]">SkyPilot</span>
+        </div>
+
+
+        <div class="gap-3 md:gap-5 lg:gap-10 text-sm lg:text-md md:font-semibold text-[#404040] hidden sm:flex">
+            <a href="" class="hover:text-black hover:border-b-2 border-[#007BFF]">Home</a>
+            <a href="" class="hover:text-black hover:border-b-2 border-[#007BFF]">Usecases</a>
+            <a href="" class="hover:text-black hover:border-b-2 border-[#007BFF]">Highlights</a>
+            <a href="" class="hover:text-black hover:border-b-2 border-[#007BFF]">Gallery</a>
+        </div>
+
+        <button
+            class="bg-[#007BFF] hidden sm:block text-sm font-bold text-white py-1 lg:py-2 px-2 lg:px-4 lg:text-md rounded-full cursor-pointer hover:shadow-md ">Contact
+            us</button>
+        <button class="sm:hidden">
+            <img src="./assets/menu.png" alt="" class="w-8">
+        </button>
+    </nav>
+
+
+    <section class="px-20 relative">
+        <img src="./assets/hero.png" alt="" class="w-full h-[850px] object-cover rounded-[60px]">
+
+        <div class="absolute bottom-10 left-40 space-y-3">
+            <p class="text-md lg:text-2xl font-extrabold text-[#333738]">Redefine the Sky with SkyPilot</p>
+            <p class="text-md lg:text-xl font-light text-[#333738]">Explore our AI-powered drones for photography,
+                delivery, and more.”</p>
+            <button
+                class="bg-[#007BFF] hidden sm:block text-sm font-bold text-white py-1 lg:py-2 px-2 lg:px-4 lg:text-md rounded-full cursor-pointer hover:shadow-md ">Explore
+                Drones</button>
+        </div>
+
+        <div class="px-20 py-10 absolute bottom-0 right-20  rounded-[48px] overflow-hidden
+         bg-[#007BFF] bg-cover bg-center
+         shadow-xl flex flex-col items-center justify-center text-white">
+
+            <!-- Content -->
+            <div class="relative z-10 text-center">
+                <!-- Title -->
+                <h2 class="text-3xl font-semibold tracking-wide mb-10">
+                    DriftR X
+                </h2>
+
+                <!-- Features -->
+                <div class="flex gap-14">
+                    <!-- Item 1 -->
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center">
+                            <span class="text-blue-600 text-xl">⏱️</span>
+                        </div>
+                        <p class="text-sm mt-1">30-min<br />Flight</p>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center">
+                            <span class="text-blue-600 text-xl">📷</span>
+                        </div>
+                        <p class="text-sm mt-1">4K<br />Camera</p>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center">
+                            <span class="text-blue-600 text-xl">🎥</span>
+                        </div>
+                        <p class="text-sm mt-1">AI<br />Stabilizer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+
+</html>
+
+
+<!-- https://www.figma.com/design/ashS937jmw8woeDmfyymAi/Drone-website%E2%9C%A8%F0%9F%8E%A8ui-design--Community- -->
