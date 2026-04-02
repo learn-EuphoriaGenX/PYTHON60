@@ -7,7 +7,21 @@ import uuid
 
 # Create your views here.
 def Blogs(request):
-    return render(request, 'allblogs.html')
+    blogs = Blog.objects.filter(visibility='public').order_by('-created_at')
+    return render(request, 'allblogs.html', { 'blogs': blogs })
+
+@login_required(login_url='login')
+def BlogDetail(request, slug_value):
+    try:
+        blog = Blog.objects.get(slug=slug_value)
+        if blog.visibility == 'private' and blog.author != request.user:
+            messages.error(request, "You don't have permission to view this blog.")
+            return redirect('blogs')
+        return render(request, 'blog.html', {'blog': blog})
+    except Blog.DoesNotExist:
+        messages.error(request, "Blog not found.")
+        return redirect('blogs')
+
 
 @login_required(login_url='login')
 def Create(request):
@@ -75,10 +89,5 @@ def Create(request):
             c.delete()
             messages.success(request, 'Category Deleted.')
             return redirect('create')
-
-            
-
-            
-
 
     return render(request, 'create.html', {'data': categories})
