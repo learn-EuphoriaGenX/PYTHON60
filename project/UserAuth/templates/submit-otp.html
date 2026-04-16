@@ -40,24 +40,33 @@
                     >
                 </div>
 
+                <input type="hidden" name="username" value="{{ user.username }}">
+
                 <!-- Verify Button -->
                 <button 
                     type="submit"
+                    name="submit_otp"
                     class="w-full py-3 bg-blue-600 hover:bg-blue-700 transition-all text-white font-semibold text-lg rounded-2xl shadow-lg shadow-blue-500/30">
                     Verify OTP
                 </button>
             </form>
 
             <!-- Resend Section -->
-            <div class="text-center mt-8">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="username" value="{{ user.username }}">
+                <div class="text-center mt-8">
                 <p class="text-sm text-slate-600">
                     Didn't receive the code? 
-                    <a href="#" 
+                    <button 
+                    type="submit"
+                    name="resend_otp"
                        class="text-blue-600 hover:text-blue-700 font-medium">
                         Resend OTP
-                    </a>
+                    </button>
                 </p>
-            </div>
+                </div>
+            </form>
 
             <!-- Back to Login -->
             <div class="text-center mt-8">

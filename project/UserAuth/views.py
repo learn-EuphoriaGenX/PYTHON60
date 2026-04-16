@@ -97,6 +97,7 @@ def ForgetPassword(request):
                 
         # generate OTP and send email logic here
         otp = random.randint(1000, 9999)
+        print(otp)
         new_otp = OtpModel(user=user, otp=otp)
         new_otp.save()
         # send email to user.email with the otp
@@ -117,9 +118,31 @@ def ForgetPassword(request):
         return render(request, 'submit-otp.html', {'user': user})
 
     if request.method == 'POST' and 'resend_otp' in request.POST:
-        pass
 
+        user = User.objects.get(username=request.POST.get('username'))
+        # delete old otp
+        OtpModel.objects.filter(user=user).delete()
+        otp = random.randint(1000, 9999)
+        print(otp)
+        new_otp = OtpModel(user=user, otp=otp)
+        new_otp.save()
+        try:
+            send_mail(
+                'Your OTP for Password Reset', # email subject
+                f'Your OTP for password reset is {otp}. It is valid for 10 minutes.', # email body
+                settings.DEFAULT_FROM_EMAIL, # from email
+                [user.email], # to email
+                fail_silently=False, # in case of error, it will raise an exception instead of failing silently
+            )
+        except Exception as e:
+                messages.error(request, f'Error sending email: {str(e)}')
+                return redirect('forget-password')
+        
+        messages.success(request, f'An OTP has been sent to your email {user.email}')
+        return render(request, 'submit-otp.html', {'user': user})
+        
     if request.method == 'POST' and 'submit_otp' in request.POST:
+        print("Hello")
         pass
 
     if request.method == 'POST' and 'change_password' in request.POST:
