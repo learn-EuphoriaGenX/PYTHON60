@@ -71,81 +71,111 @@ def Logout(request):
     return redirect('login')
 
 
+from django.utils import timezone
+from datetime import timedelta
+
 def ForgetPassword(request):
-
     if request.method == 'POST' and 'send_otp' in request.POST:
-        username_or_email = request.POST.get('username_or_email') # can be either username or email
-        if not username_or_email:
-            messages.error(request, 'Please enter your username or email')
-            return redirect('forget-password')
-        else:
-            user = None
-            email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-            if '@' in username_or_email and re.match(email_regex, username_or_email):   
-                try:
-                    user = User.objects.get(email=username_or_email)
-                    print(user)
-                except User.DoesNotExist:
-                    messages.error(request, f'No user found with this email {username_or_email}')
-                    return redirect('forget-password')
-            else:
-                try:
-                    user = User.objects.get(username=username_or_email)
-                except User.DoesNotExist:
-                    messages.error(request, f'No user found with this username {username_or_email}')
-                    return redirect('forget-password')
-                
-        # generate OTP and send email logic here
-        otp = random.randint(1000, 9999)
-        print(otp)
-        new_otp = OtpModel(user=user, otp=otp)
-        new_otp.save()
-        # send email to user.email with the otp
+        username_or_email = request.POST.get('username_or_email')
 
+        if not username_or_email:
+            messages.error(request, 'Please enter username or email')
+            return redirect('forget-password')
+
+        user = None
+        if '@' in username_or_email:
+            user = User.objects.filter(email=username_or_email).first()
+        else:
+            user = User.objects.filter(username=username_or_email).first()
+
+        if not user:
+            messages.error(request, 'User not found')
+            return redirect('forget-password')
+
+        OtpModel.objects.filter(user=user).delete()
+
+        otp = random.randint(1000, 9999)
+        OtpModel.objects.create(
+            user=user,
+            otp=otp,
+            created_at=timezone.now()
+        )
+    
         try:
             send_mail(
-                'Your OTP for Password Reset', # email subject
-                f'Your OTP for password reset is {otp}. It is valid for 10 minutes.', # email body
-                settings.DEFAULT_FROM_EMAIL, # from email
-                [user.email], # to email
-                fail_silently=False, # in case of error, it will raise an exception instead of failing silently
+                'Password Reset OTP',
+                f'Your OTP is {otp}. Valid for 10 minutes.',
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                fail_silently=False,
             )
         except Exception as e:
-                messages.error(request, f'Error sending email: {str(e)}')
-                return redirect('forget-password')
-        
-        messages.success(request, f'An OTP has been sent to your email {user.email}')
-        return render(request, 'submit-otp.html', {'user': user})
+            messages.error(request, 'Failed to send email')
+            return redirect('forget-password')
+
+        messages.success(request, f'OTP {otp} sent to {user.email}')
+        return render(request, 'submit-otp.html', {'username': user.username})
 
     if request.method == 'POST' and 'resend_otp' in request.POST:
+        username = request.POST.get('username')
+        user = User.objects.filter(username=username).first()
+      
 
-        user = User.objects.get(username=request.POST.get('username'))
-        # delete old otp
+        if not user:
+            return redirect('forget-password')
+
         OtpModel.objects.filter(user=user).delete()
-        otp = random.randint(1000, 9999)
-        print(otp)
-        new_otp = OtpModel(user=user, otp=otp)
-        new_otp.save()
-        try:
-            send_mail(
-                'Your OTP for Password Reset', # email subject
-                f'Your OTP for password reset is {otp}. It is valid for 10 minutes.', # email body
-                settings.DEFAULT_FROM_EMAIL, # from email
-                [user.email], # to email
-                fail_silently=False, # in case of error, it will raise an exception instead of failing silently
-            )
-        except Exception as e:
-                messages.error(request, f'Error sending email: {str(e)}')
-                return redirect('forget-password')
-        
-        messages.success(request, f'An OTP has been sent to your email {user.email}')
-        return render(request, 'submit-otp.html', {'user': user})
-        
-    if request.method == 'POST' and 'submit_otp' in request.POST:
-        print("Hello")
-        pass
 
+        otp = random.randint(1000, 9999)
+        OtpModel.objects.create(user=user, otp=otp, created_at=timezone.now())
+
+        send_mail(
+            'Password Reset OTP',
+            f'Your OTP is {otp}. Valid for 10 minutes.',
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+        )
+
+        messages.success(request, f'New OTP {otp} sent to {user.email}')
+        return render(request, 'submit-otp.html', {'username': user.username})
+
+    if request.method == 'POST' and 'submit_otp' in request.POST:
+        otp = request.POST.get('otp')
+        username = request.POST.get('username')
+
+        user = User.objects.filter(username=username).first()
+        otp_obj = OtpModel.objects.filter(user=user, otp=otp).first()
+
+        if not otp_obj:
+            messages.error(request, 'Invalid OTP')
+            return render(request, 'submit-otp.html', {'username': username})
+
+        # 🔥 expiry check (10 min)
+        if timezone.now() > otp_obj.created_at + timedelta(minutes=10):
+            otp_obj.delete()
+            messages.error(request, 'OTP expired')
+            return render(request, 'forget-password.html')
+
+        otp_obj.delete()
+
+        return render(request, 'change-password.html', {'username': username})
     if request.method == 'POST' and 'change_password' in request.POST:
-        pass
+        username = request.POST.get('username')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+            messages.error(request, 'Passwords do not match')
+            return render(request, 'change-password.html', {'username': username})
+
+        user = User.objects.filter(username=username).first()
+        print(user)
+        print(new_password)
+
+        user.set_password(new_password)
+        user.save()
+
+        messages.success(request, 'Password changed successfully')
+        return redirect('login')
 
     return render(request, 'forgetpassword.html')
