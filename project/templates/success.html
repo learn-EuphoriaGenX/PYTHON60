@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mt-12">
+            <svg class="w-20 h-20 mx-auto text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <h1 class="text-4xl font-bold text-foreground mb-4">Payment Successful</h1>
+            <p class="text-xl text-muted-foreground mb-8">Thank you for your purchase! Your subscription is now active.</p>
+            
+            <div class="space-y-3 mb-8">
+                <p class="text-muted-foreground">Order ID: <span class="font-mono">{{ order_id }}</span></p>
+                <p class="text-muted-foreground">Plan: <span class="font-semibold">{{ plan }}</span></p>
+                <p class="text-muted-foreground">Amount: <span class="font-semibold">{{ amount }}</span></p>
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <a href="{% url 'pricing' %}" class="bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    Go to Pricing
+                </a>
+                <a href="{% url 'home' %}" class="bg-secondary text-secondary-foreground px-6 py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

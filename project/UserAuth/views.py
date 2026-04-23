@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import OtpModel
+from .models import OtpModel, PremiumUser
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 import random
@@ -35,6 +35,7 @@ def Register(request):
         else:
             new_user = User.objects.create_user(username=username, email=email, password=password)
             new_user.save()
+            PremiumUser.objects.create(user=new_user, is_premium=False)
             messages.success(request, 'User registered successfully')
             return render(request, 'login.html')
 

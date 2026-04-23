@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mt-12">
+            <svg class="w-20 h-20 mx-auto text-red-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h1 class="text-4xl font-bold text-foreground mb-4">Payment Failed</h1>
+            <p class="text-xl text-muted-foreground mb-8">We're sorry, but your payment could not be processed.</p>
+            
+            <div class="space-y-3 mb-8">
+                {% if message %}
+                    <p class="text-lg text-red-500">{{ message }}</p>
+                {% endif %}
+                <p class="text-muted-foreground">Please check your payment details and try again.</p>
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <a href="{% url 'pricing' %}" class="bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    Try Again
+                </a>
+                <a href="{% url 'home' %}" class="bg-secondary text-secondary-foreground px-6 py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

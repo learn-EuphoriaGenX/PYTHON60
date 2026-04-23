@@ -20,115 +20,35 @@ Pricing | The Daily Draft
   <!-- Grid -->
   <div class="relative before:absolute before:inset-0 before:-z-1 before:bg-[radial-gradient(closest-side,var(--color-surface-1),transparent)] mt-12">
     <div class="grid gap-px sm:grid-cols-2 lg:grid-cols-3 lg:items-center lg:justify-center lg:gap-8">
-      <!-- Card -->
-      <div class="flex flex-col h-full text-center bg-blue-100 rounded-xl">
-        <div class="bg-card pt-8 pb-5 px-8">
-          <h4 class="font-medium text-lg text-foreground">Free</h4>
-        </div>
 
-        <div class="h-full bg-card lg:mt-px lg:py-5 px-8">
-          <span class="mt-7 font-bold text-5xl text-foreground">
-            Free
-          </span>
-        </div>
-
-        <div class="bg-card flex justify-center lg:mt-px pt-7 px-8">
-          <ul class="space-y-2.5 text-center text-sm">
-            <li class="text-foreground">
-              1 user
-            </li>
-
-            <li class="text-foreground">
-              Plan features
-            </li>
-
-            <li class="text-foreground">
-              Product support
-            </li>
-          </ul>
-        </div>
-
-        <div class="bg-card py-8 px-8">
-          <a class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-primary text-primary hover:border-primary-hover hover:text-primary-hover focus:outline-hidden focus:border-primary-focus focus:text-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="#">
-            Sign up
-          </a>
-        </div>
+      {% for plan in plans %}
+      <form action="" method="post">
+        {% csrf_token %}
+        <!-- Card -->
+  <div class="bg-surface-1 rounded-lg border border-border-2 overflow-hidden">
+    <div class="p-6 lg:p-8">
+      <div class="flex justify-between items-start mb-4">
+        <h3 class="text-lg font-semibold text-foreground">{{ plan.name }}</h3>
+        <input type="hidden" name="plan_name" value="{{ plan.name }}">
+        <span class="text-xl font-bold text-foreground">₹{{ plan.price }}</span>
+        <input type="hidden" name="plan_price" value="{{ plan.price }}">
       </div>
-      <!-- End Card -->
 
-      <!-- Card -->
-      <div class="flex flex-col h-full text-center bg-blue-200 rounded-xl">
-        <div class="bg-card pt-8 pb-5 px-8">
-          <h4 class="font-medium text-lg text-foreground">Startup</h4>
-        </div>
+      <ul class="space-y-3 mb-6 text-sm">
+        {% for feature in plan.features %}
+        <li class="flex items-start gap-x-3">
+          <span class="mt-1 h-2 w-2 rounded-full bg-primary shrink-0"></span>
+          {{ feature }}
+        </li>
+        {% endfor %}
+      </ul>
+      <button type="submit" name="select_plan" class="w-full py-2 px-4 rounded-md bg-blue-700 text-white hover:bg-blue-600 transition">Choose Plan</button>
+    </div>
+  </div>
+  <!-- End Card -->
 
-        <div class="h-full bg-card lg:mt-px lg:py-5 px-8">
-          <span class="mt-7 font-bold text-5xl text-foreground">
-            <span class="font-bold text-2xl -me-2">$</span>
-            39
-          </span>
-        </div>
-
-        <div class="bg-card flex justify-center lg:mt-px pt-7 px-8">
-          <ul class="space-y-2.5 text-center text-sm">
-            <li class="text-foreground">
-              2 users
-            </li>
-
-            <li class="text-foreground">
-              Plan features
-            </li>
-
-            <li class="text-foreground">
-              Product support
-            </li>
-          </ul>
-        </div>
-
-        <div class="bg-card py-8 px-8">
-          <a class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-primary text-primary hover:border-primary-hover hover:text-primary-hover focus:outline-hidden focus:border-primary-focus focus:text-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="#">
-            Sign up
-          </a>
-        </div>
-      </div>
-      <!-- End Card -->
-
-      <!-- Card -->
-      <div class="flex flex-col h-full text-center bg-blue-300 rounded-xl">
-        <div class="bg-card pt-8 pb-5 px-8">
-          <h4 class="font-medium text-lg text-foreground">Team</h4>
-        </div>
-
-        <div class="h-full bg-card lg:mt-px lg:py-5 px-8">
-          <span class="mt-7 font-bold text-5xl text-foreground">
-            <span class="font-bold text-2xl -me-2">$</span>
-            89
-          </span>
-        </div>
-
-        <div class="bg-card flex justify-center lg:mt-px pt-7 px-8">
-          <ul class="space-y-2.5 text-center text-sm">
-            <li class="text-foreground">
-              5 users
-            </li>
-
-            <li class="text-foreground">
-              Plan features
-            </li>
-
-            <li class="text-foreground">
-              Product support
-            </li>
-          </ul>
-        </div>
-
-        <div class="bg-card py-8 px-8">
-          <a class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-primary text-primary hover:border-primary-hover hover:text-primary-hover focus:outline-hidden focus:border-primary-focus focus:text-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="#">
-            Sign up
-          </a>
-        </div>
-      </div>
-      <!-- End Card -->
+</form>
+      {% endfor %}
 
    
     </div>

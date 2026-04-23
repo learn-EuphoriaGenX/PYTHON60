@@ -13,6 +13,9 @@ SECRET_KEY = 'django-insecure-g*ft2m@ppq-srjwr1c)by@*_u&@0ae^7_12sy2l5bxx%v7!60i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+RAZOR_KEY_ID = 'rzp_test_SeU36ucxrNPj57'
+RAZOR_KEY_SECRET = 'MAOKnm7DZPbm3W3BIvBBpq9X'
+
 ALLOWED_HOSTS = []
 
 
